@@ -1,0 +1,145 @@
+---
+title: "MAGA: An Introspective Analysis Regarding President Donald J. Trump's Effect on the US Economy"
+author: "Rebecca Sosa-Coba"
+date: "1/17/2021"
+output: html_document
+---
+
+Donald J. Trump made many promises during his election campaign in 2016, and I plan on addressing his progress and overall effect on the United States. He promised a variety of things from lowering taxes, to replacing Obamacare, to making the United States economy "great again". Has Donald J. Trump actually fulfilled any of his promises? I intend on taking a closer look at the United States economy since President Trump was elected.
+
+## Introducing National Debt
+
+The United States recently surpassed 27 trillion dollars in national debt, but what does this actually mean? The US National debt is an accumulation of all the money owed by the federal government. Around 2/3 of this is public debt, which is the debt owed to everyone that owns US government bonds (1). This can include anyone from normal US citizens to foreign governments. The other 1/3 is intergovernmental holdings, which is the debt that the federal government owes to other government departments. This is often used to fund citizens' pensions, the most prominent one being the US Social Security retirement fund (2). Even within these two main sections, there are many ways in which national debt can be accumulated. Down below you will find a graph with the value of the US National Debt during President Trump's term.
+
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+
+library(tidyverse)
+library(readr)
+library(esquisse)
+
+Debt5years <- read_csv("DebtPenny_5_years.csv")
+
+Debt5years
+
+library(knitr)
+library(dplyr)
+library(ggplot2)
+
+Debt5years %>%
+ filter(`Record Date` >= "2015-12-30" & `Record Date` <= "2019-12-26") %>%
+ ggplot() +
+ aes(x = `Record Date`, y = `Total Public Debt Outstanding`) +
+ geom_line(size = 1L, colour = "#FF3300") +
+ labs(y = "Total Public Debt (in USD)", title = "United States National Debt Over Time") +
+ theme_minimal()
+
+```
+
+The debt in the United States (and around the world) has been increasing over time. There has generally always been a steep incline in public debt over time, but there was a spike in the middle of 2017. It is important to note that Donald Trump was elected in November of 2016, and inaugurated in January of 2017. This may be a reason why public debt was not changing at the beginning of 2017, and then spiked towards the middle.
+
+## Introducing Gross Domestic Product (GDP)
+
+Gross domestic product (more commonly known as GDP) is one of the most important economic measures to see how well a country is doing. Strictly speaking, the GDP is the value of all the goods and services produced by a country. This can demonstrate the total dollar value that goods and services have in that particular economy (3). In other terms, it's a measurement of the size and value of an economy. It is often used to tell how good a country's economy is doing. If the economy is in a recession, the GDP will show it. The GDP is greatly affected by current events, which is why the country often goes into a recession when there are wars or pandemics. Although a recession leads to lower stock value, this is actually a prime time for investors to buy stocks. Down below you will find a graph with the value of the GDP in the United States during President Trump's term.
+
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+library(readxl)
+library(tidyverse)
+
+just4GDP <- read_excel("justGDP.xls")
+
+just4GDP
+
+library(lubridate)
+
+just4GDP$observation_date <- as_date(just4GDP$observation_date)
+
+library(ggplot2)
+
+ggplot(just4GDP) +
+ aes(x = observation_date, y = GDP) +
+ geom_line(size = 1.16, colour = "#74c476") +
+ labs(x = "Record Date", y = "Total GDP (in billions of USD)", title = "United States Gross Domestic Product (GDP) Over Time") +
+ theme_minimal()
+
+```
+
+Similar to the United States national debt, the GDP is generally increasing. The GDP during Trump's presidency was increasing at first, but it slowly decreased towards the end of 2019, and had a steep decline in 2020. This is around the start of the pandemic, which makes sense because there were less workers available to produce goods and provide services. Many workers died or refused to come to work out of fear of contracting the virus. However, the duration of the pandemic was exceptionally long, and therefore workers were required to go back to work in order to sustain their families. This might explain why the GDP started increasing again in Q3 of 2020.
+
+## Comparing Debt to GDP
+
+The debt-to-GDP ratio is a way of comparing a country's national debt to its GDP. If the entirety of the GDP was used to pay back debt, you can accurately use the debt-to-GDP ratio to predict a country's ability to pay back its debt. If the rate is high, that means the country is spending a lot more than they are producing. When the ratio is moderately high, creditors (people who lend money) will typically apply higher interest rates. However, when the ratio is extremely high, creditors will typically abstain from lending money at all (4). The debt-to-GDP ratio was 38% when the United States entered WWII in 1941 and was 114% by the time WWII ended in 1945. It is heavily influenced by the current events in the country, and around the world. Below you will find the debt-to-GDP ratio in the United States during Donald J. Trump's presidency. 
+
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+
+realdebt2GDPratio <- read_excel("realdebt2GDPratio.xlsx")
+
+realdebt2GDPratio
+
+library(dplyr)
+library(ggplot2)
+
+realdebt2GDPratio %>%
+ filter(Date >= "2016-01-01 12:00:00" & Date <= "2020-09-01 00:00:00") %>%
+ ggplot() +
+ aes(x = Date, y = Ratio) +
+ geom_line(size = 1.16, colour = "#67b6df") +
+ labs(x = "Record Date", y = "Debt-to-GDP Ratio", title = "United States Debt-to-GDP Ratio Over Time") +
+ theme_minimal()
+
+```
+
+Over the years, our debt-to-GDP ratio has been skyrocketing, which shouldn't come as much of a surprise. According to the World Bank, if the debt-to-GDP ratio exceeds 77% for a long period of time, then the growth of the economy is significantly slowed down (5). The US debt-to-GDP ratio has been greater than 77% since 2009, and it stayed high during Trump's presidency. The debt-to-GDP ratio stayed fairly constant for the first three years of Trump's presidency, and then increased in 2019 and 2020. A comparative study was conducted that focused on the debt-to-GDP ratio and any major event that occurred in that fiscal year. The study showed that our debt-to-GDP ratio has generally shown a continuous positive trend, but can drastically increase during times of crises (6). In the next section, I want to take a closer look on how COVID-19 impacted the US economy. 
+
+## COVID-19 and the Economy
+
+The spread of COVID-19 has impacted countries around the world, especially the United States. One of the reasons the virus became so widespread in the United States was because we had a relatively short lockdown, and reopened public places sooner than most countries. President Trump claimed a prolonged lockdown would hurt our economy, but countries that maintained their lockdown are now back to normal. This raises the question of whether reopening the country was actually better for the US economy. Down below you will find a comparison of the government debt for many different countries.
+
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+
+globaldebt <- read_excel("statistic_id1034440_gross-government-debt-in-advanced-economies-2014-2020.xlsx")
+
+globaldebt
+
+library(lubridate)
+
+globaldebt$Date <- as_date(globaldebt$Date)
+
+realglobaldebt <- read_excel("globaldebtinfo.xlsx")
+
+realglobaldebt
+
+
+library(ggplot2)
+
+ggplot(realglobaldebt) +
+ aes(x = Date, y = France) +
+ geom_line(aes(y = France, color = "France")) +
+ geom_line(aes(y = Germany, color = "Germany")) +
+ geom_line(aes(y = Japan, color = "Japan")) +
+ geom_line(aes(y = United_Kingdom, color = "United Kingdom")) +
+ geom_line(aes(y = United_States, color = "United States")) +
+ labs(x = "Record Date", y = "Debt (in trillions of USD)", title = "Global Debt Over Time") +
+ theme_minimal()
+
+```
+
+COVID-19 has impacted economies worldwide, whether it be for better or worse. The debt around the world has generally been increasing, however, the United States debt has skyrocketed over time, especially compared to other nations. Many countries saw an increase in debt in 2020, but none were as drastic as the United States. Japan, one of the few countries with a debt comparable to the United States, didn't see a major change in 2020. The United States' debt in 2020 could have been influenced by the spread of COVID-19, the death of George Floyd which incited many Black Lives Matter protests, as well as the presidential election. There were many major events in 2020, and so it becomes difficult to pin the drastic increase to one thing. 
+
+
+## Works Cited
+
+1. https://www.thebalance.com/the-u-s-debt-and-how-it-got-so-big-3305778
+2. https://www.thebalance.com/what-is-the-national-debt-4031393
+3. https://www.investopedia.com/ask/answers/what-is-gdp-why-its-important-to-economists-investors/
+4. https://www.investopedia.com/terms/d/debtgdpratio.asp#
+5. http://elibrary.worldbank.org/doi/abs/10.1596/1813-9450-5391
+6. https://www.thebalance.com/national-debt-by-year-compared-to-gdp-and-major-events-3306287
+
+## Data Sets
+
+1. Debt - https://fiscaldata.treasury.gov/datasets/debt-to-the-penny/debt-to-the-penny
+2. GDP - https://fred.stlouisfed.org/series/GDP
+3. Debt-to-GDP Ratio - https://www.macrotrends.net/1381/debt-to-gdp-ratio-historical-chart
+4. Global Debt - https://www.statista.com/statistics/1034440/gross-government-debt-in-advanced-economies/
+
+
